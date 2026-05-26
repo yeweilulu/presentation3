@@ -348,9 +348,9 @@
           <!-- Glowing Rail Tracker -->
           <div class="relative flex-1 flex items-center mt-1 select-none w-full">
             <!-- Background laser conduit track (positioned exactly relative to first and last node centers) -->
-            <div class="absolute left-[8.33%] right-[8.33%] h-1 bg-slate-900 rounded-full z-0"></div>
+            <div class="absolute top-5 left-[8.33%] right-[8.33%] h-1 bg-slate-900 rounded-full z-0"></div>
             <!-- Dynamic neon flow pipeline filler (positioned exactly relative to first and last node centers) -->
-            <div id="pipeline-progress" class="absolute left-[8.33%] h-1 bg-gradient-to-r from-cyan-500 via-amber-400 to-emerald-400 duration-1000 z-0 shadow-[0_0_8px_rgba(6,182,212,0.4)]" style="width: 0%;"></div>
+            <div id="pipeline-progress" class="absolute top-5 left-[8.33%] h-1 bg-gradient-to-r from-cyan-500 via-amber-400 to-emerald-400 duration-1000 z-0 shadow-[0_0_8px_rgba(6,182,212,0.4)]" style="width: 0%;"></div>
 
             <!-- Six equally divided grid cells, each centering its stage node, aligning circles perfectly with the progress bar -->
             <div class="w-full grid grid-cols-6 relative z-10">
@@ -1270,6 +1270,12 @@
           triggerRAGRetrieval(taskIdx);
         }
 
+        // Final report sections should start rendering while the task is running,
+        // not after the task duration has fully elapsed.
+        if (state.currentStageIndex === 5) {
+          revealReportOutputSegment(taskIdx);
+        }
+
         // Start progress bar animation
         let elapsed = 0;
         const total = task.duration;
@@ -1334,11 +1340,6 @@
 
         // Increment ratio counter in middle header
         document.getElementById('current-task-ratio-text').textContent = `当前进度 (${taskIdx + 1}/${stage.tasks.length})`;
-
-        // Special output triggers for final reports
-        if (state.currentStageIndex === 5) {
-          revealReportOutputSegment(taskIdx);
-        }
 
         const nextIdx = taskIdx + 1;
         if (nextIdx < stage.tasks.length) {

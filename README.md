@@ -12,9 +12,30 @@ View your app in AI Studio: https://ai.studio/apps/346daf53-ac49-4427-aa2f-f661b
 
 **Prerequisites:**  Node.js
 
-
 1. Install dependencies:
    `npm install`
 2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
 3. Run the app:
    `npm run dev`
+
+## Deploy To GitHub Pages
+
+Repository: `https://github.com/yeweilulu/presentation3`
+
+1. Install dependencies:
+   `npm install`
+2. One-click deploy:
+   `npm run deploy`
+
+The deploy flow will automatically:
+
+- run `npm run build`
+- publish the `dist` directory to the `gh-pages` branch
+
+Vite is configured with:
+
+- `base: '/presentation3/'`
+
+Published URL:
+
+- `https://yeweilulu.github.io/presentation3`
