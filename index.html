@@ -1,0 +1,1804 @@
+<!doctype html>
+<html lang="zh-CN" class="h-full bg-[#03050c] overflow-hidden">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AstraConsult Agentic Intelligence | 咨询工作流指挥舱</title>
+    <!-- Imports standard high-end fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'system-ui', 'sans-serif'],
+              display: ['Space Grotesk', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace'],
+            },
+            colors: {
+              cyber: {
+                black: '#03050d',
+                dark: '#070b16',
+                panel: 'rgba(13, 20, 38, 0.75)',
+                blue: '#38bdf8',
+                cyan: '#06b6d4',
+                amber: '#fbbf24',
+                gold: '#fbbf24',
+                green: '#10b981',
+                purple: '#a855f7',
+                red: '#ef4444',
+                border: 'rgba(56, 189, 248, 0.15)',
+                borderGold: 'rgba(251, 191, 36, 0.15)'
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      /* Glowing styles and custom cyber designs */
+      .glass-panel {
+        background: rgba(10, 15, 30, 0.7);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(56, 189, 248, 0.12);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+      }
+      .glass-panel-gold {
+        background: rgba(15, 12, 10, 0.75);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(251, 191, 36, 0.15);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
+      }
+      .neon-glow-cyan {
+        box-shadow: 0 0 15px rgba(6, 182, 212, 0.25);
+      }
+      .neon-glow-gold {
+        box-shadow: 0 0 20px rgba(251, 191, 36, 0.18);
+      }
+      .neon-text-gold {
+        text-shadow: 0 0 10px rgba(251, 191, 36, 0.6);
+      }
+      .neon-border-green {
+        border-color: rgba(16, 185, 129, 0.4);
+        box-shadow: 0 0 15px rgba(16, 185, 129, 0.15);
+      }
+      
+      /* Scan line animation */
+      .terminal-scan::after {
+        content: " ";
+        display: block;
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90.1deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+        background-size: 100% 2px, 3px 100%;
+        pointer-events: none;
+        z-index: 10;
+      }
+      .scanner-bar {
+        background: linear-gradient(to bottom, transparent, rgba(6, 182, 212, 0.4), transparent);
+        animation: scanAnim 3s linear infinite;
+      }
+      @keyframes scanAnim {
+        0% { top: 0%; }
+        50% { top: 100%; }
+        100% { top: 0%; }
+      }
+
+      /* Grid perspective backdrop */
+      .perspective-grid {
+        background-image: 
+          linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+        background-size: 40px 40px;
+        transform: perspective(500px) rotateX(25deg);
+        transform-origin: top center;
+      }
+
+      /* Cyber Corners decoration helper */
+      .cyber-corners::before, .cyber-corners::after {
+        content: "";
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        border-color: rgba(6, 182, 212, 0.4);
+        border-style: solid;
+        pointer-events: none;
+      }
+      .cyber-corners::before {
+        top: 0; left: 0;
+        border-width: 2px 0 0 2px;
+      }
+      .cyber-corners::after {
+        top: 0; right: 0;
+        border-width: 2px 2px 0 0;
+      }
+      
+      .cyber-corners-bottom::before, .cyber-corners-bottom::after {
+        content: "";
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        border-color: rgba(6, 182, 212, 0.4);
+        border-style: solid;
+        pointer-events: none;
+      }
+      .cyber-corners-bottom::before {
+        bottom: 0; left: 0;
+        border-width: 0 0 2px 2px;
+      }
+      .cyber-corners-bottom::after {
+        bottom: 0; right: 0;
+        border-width: 0 2px 2px 0;
+      }
+
+      /* Gold variants of corners appreciated by executives */
+      .gold-corners::before {
+        border-color: rgba(251, 191, 36, 0.5) !important;
+      }
+      .gold-corners::after {
+        border-color: rgba(251, 191, 36, 0.5) !important;
+      }
+
+      /* Custom narrow scrollbar styling */
+      .narrow-scroll::-webkit-scrollbar {
+        width: 4px;
+      }
+      .narrow-scroll::-webkit-scrollbar-track {
+        background: rgba(15, 23, 42, 0.2);
+      }
+      .narrow-scroll::-webkit-scrollbar-thumb {
+        background: rgba(6, 182, 212, 0.3);
+        border-radius: 99px;
+      }
+      .narrow-scroll::-webkit-scrollbar-thumb:hover {
+        background: rgba(6, 182, 212, 0.5);
+      }
+
+      /* Typing cursor animation */
+      .typing-cursor {
+        display: inline-block;
+        width: 8px;
+        height: 15px;
+        background-color: #fbbf24;
+        animation: blink 0.8s infinite;
+        vertical-align: middle;
+      }
+      @keyframes blink {
+        0%, 100% { opacity: 0; }
+        50% { opacity: 1; }
+      }
+
+      /* Custom button animations */
+      .shiny-button {
+        position: relative;
+        overflow: hidden;
+      }
+      .shiny-button::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -60%;
+        width: 30%;
+        height: 200%;
+        background: linear-gradient(
+          to right,
+          transparent,
+          rgba(255, 255, 255, 0.2) 50%,
+          transparent
+        );
+        transform: rotate(25deg);
+        transition: none;
+      }
+      .shiny-button:hover::after {
+        left: 140%;
+        transition: all 0.75s ease-in-out;
+      }
+
+      /* Shockwave overlay for stage completion */
+      #shockwave {
+        pointer-events: none;
+        opacity: 0;
+        transition: transform 0.8s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 0.8s ease-out;
+      }
+    </style>
+  </head>
+  <body class="h-full font-sans text-slate-100 flex flex-col justify-between select-none relative bg-[#04060e] terminal-scan">
+    
+    <!-- Background Canvas layer for drifting code particles & matrix glow -->
+    <canvas id="bg-canvas" class="absolute inset-0 pointer-events-none z-0"></canvas>
+    <!-- Full-screen shockwave element triggered upon phase transitions -->
+    <div id="shockwave" class="absolute inset-0 bg-transparent border-4 border-amber-400/20 rounded-full scale-0 z-50 pointer-events-none transform translate-y-0"></div>
+
+    <!-- UPPER NAVIGATION HUD BAR -->
+    <header class="h-16 shrink-0 flex items-center justify-between px-6 bg-[#040713]/90 border-b border-cyan-500/15 backdrop-blur-md relative z-30">
+      <div class="flex items-center gap-3">
+        <!-- Spinning Concentric Star Logo -->
+        <div class="relative w-8 h-8 flex items-center justify-center">
+          <div class="absolute inset-0 border border-t-cyan-400 border-r-amber-400 border-b-purple-400 border-l-transparent rounded-full animate-spin"></div>
+          <div class="absolute inset-1.5 border border-dashed border-cyan-500/30 rounded-full animate-spin [animation-duration:8s] [animation-direction:reverse]"></div>
+          <div class="w-2 h-2 bg-amber-400 rounded-full animate-pulse shadow-[0_0_8px_#fbbf24]"></div>
+        </div>
+        <div>
+          <h1 class="font-display font-semibold tracking-tight text-white flex items-center gap-2 text-md">
+            <span>AstraConsult</span>
+            <span class="text-xs px-2 py-0.5 rounded border border-amber-400/20 text-amber-400 font-mono bg-amber-400/5 uppercase">Agentic Intelligence</span>
+          </h1>
+          <p class="text-[10px] text-slate-400 font-mono uppercase tracking-wider">From Enterprise Context to Board-Ready Strategy</p>
+        </div>
+      </div>
+
+      <!-- Live Workflow Status Dial in center -->
+      <div class="hidden md:flex items-center gap-4 bg-[#080d1e]/80 border border-slate-800/60 px-4 py-1.5 rounded-full px-5">
+        <span class="relative flex h-2 w-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span id="global-indicator" class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+        </span>
+        <span class="text-xs font-mono text-slate-300 tracking-wide uppercase">演示状态: <span id="dashboard-status-text" class="text-cyan-400">准备就绪 - 等待注入</span></span>
+      </div>
+
+      <!-- Live metrics readout in Space font -->
+      <div class="flex items-center gap-6 font-mono text-[11px] text-slate-400">
+        <div class="text-right">
+          <span class="block text-slate-500 text-[9px] uppercase">已处理算力 TOKENS</span>
+          <span id="metric-tokens" class="text-slate-200 text-xs font-semibold">0</span>
+        </div>
+        <div class="text-right border-l border-slate-800 pl-4">
+          <span class="block text-slate-500 text-[9px] uppercase">当前活跃智能体</span>
+          <span id="metric-agents" class="text-slate-200 text-xs font-semibold flex items-center justify-end gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-slate-600 inline-block animate-pulse"></span>
+            <span id="metric-agents-count">0</span>
+          </span>
+        </div>
+        <div class="text-right border-l border-slate-800 pl-4 hidden sm:block">
+          <span class="block text-slate-500 text-[9px] uppercase">分析合规置信度</span>
+          <span id="metric-confidence" class="text-xs text-amber-400 font-semibold font-display">--</span>
+        </div>
+        <div class="text-right border-l border-slate-800 pl-4">
+          <span class="block text-slate-500 text-[9px] uppercase">系统协调时间 UTC</span>
+          <span id="ticker-time" class="text-slate-300 font-medium">2026-05-26 08:40:54</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN DASHBOARD CONTENT AREA -->
+    <main class="flex-1 min-h-0 flex flex-col lg:flex-row gap-4 p-4 relative z-20">
+      
+      <!-- LEFT SECTION: COMPANY ENTRY PANEL (22% Width, responsive) -->
+      <section id="panel-context-entry" class="w-full lg:w-[325px] flex flex-col gap-3 h-full min-h-0 shrink-0 relative transition-all duration-500">
+        
+        <div class="flex-1 border border-cyan-500/15 bg-[#090e1f]/80 backdrop-blur-xl rounded-xl p-4 flex flex-col min-h-0 relative cyber-corners cyber-corners-bottom">
+          <!-- Scanning Overlay bar for activated state class -->
+          <div id="left-panel-scanner" class="absolute inset-x-0 h-10 scanner-bar top-0 pointer-events-none hidden"></div>
+          
+          <div class="flex items-center justify-between border-b border-cyan-500/10 pb-2 mb-3 shrink-0">
+            <h2 class="font-display font-medium text-sm text-cyan-300 uppercase tracking-wider flex items-center gap-2">
+              <i data-lucide="database" class="w-4 h-4 text-cyan-400"></i>
+              企业上下文输入舱
+            </h2>
+            <span id="context-badge" class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700 uppercase">等待注入</span>
+          </div>
+
+          <div class="flex-1 overflow-y-auto narrow-scroll pr-1 py-1 space-y-3 min-h-0 text-xs text-slate-300" id="input-fields-container">
+            <div>
+              <label class="block text-slate-400 font-mono text-[10px] uppercase mb-1">企业全称 Company Name</label>
+              <input type="text" id="input-company" value="NovaTech Manufacturing Group" class="w-full bg-[#050a16] border border-cyan-500/15 rounded-md px-3 py-2 text-white focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition-all duration-300 font-semibold">
+            </div>
+            
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-slate-400 font-mono text-[10px] uppercase mb-1">所属行业 Industry</label>
+                <input type="text" id="input-industry" value="Advanced Manufacturing" class="w-full bg-[#050a16] border border-cyan-500/15 rounded-md px-3 py-2 text-white focus:outline-none focus:border-cyan-400 transition-all duration-300 text-[11px]">
+              </div>
+              <div>
+                <label class="block text-slate-400 font-mono text-[10px] uppercase mb-1">当前规模 Size</label>
+                <input type="text" id="input-size" value="860 employees" class="w-full bg-[#050a16] border border-cyan-500/15 rounded-md px-3 py-2 text-white focus:outline-none focus:border-cyan-400 transition-all duration-300 text-[11px]">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-slate-400 font-mono text-[10px] uppercase mb-1">年核心营收 Annual Revenue</label>
+              <input type="text" id="input-[#revenue]" value="$128M" class="w-full bg-[#050a16] border border-cyan-500/15 rounded-md px-3 py-2 text-white focus:outline-none focus:border-cyan-400 transition-all duration-300 text-[11px] text-emerald-400 font-mono font-semibold">
+            </div>
+
+            <div>
+              <label class="block text-slate-400 font-mono text-[10px] uppercase mb-1">关键痛点挑战 Core Challenges (逗号隔开)</label>
+              <textarea id="input-challenges" rows="3" class="w-full bg-[#050a16] border border-cyan-500/15 rounded-md px-3 py-2 text-white focus:outline-none focus:border-cyan-400 transition-all duration-300 text-[11px] resize-none narrow-scroll leading-relaxed">Fragmented data systems, manual quality inspection, slow executive reporting, low forecast accuracy</textarea>
+            </div>
+
+            <div>
+              <label class="block text-slate-400 font-mono text-[10px] uppercase mb-1">咨询与交付目标 Consulting Goals</label>
+              <textarea id="input-goals" rows="3" class="w-full bg-[#050a16] border border-cyan-500/15 rounded-md px-3 py-2 text-white focus:outline-none focus:border-cyan-400 transition-all duration-300 text-[11px] resize-none narrow-scroll leading-relaxed">Generate an AI transformation strategy report focused on cost reduction, quality intelligence, and executive decision speed.</textarea>
+            </div>
+          </div>
+
+          <!-- Bottom trigger console inside panel -->
+          <div class="mt-4 pt-3 border-t border-slate-800 shrink-0">
+            <button id="btn-inject-context" onclick="sendEnterpriseContext()" class="shiny-button w-full bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-500 hover:to-blue-600 text-white font-display text-xs font-semibold py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 duration-300 active:scale-95 shadow-[0_4px_12px_rgba(6,182,212,0.15)] select-none">
+              <i data-lucide="send" class="w-3.5 h-3.5 transition-transform group-hover:translate-x-1"></i>
+              注入企业上下文信息
+            </button>
+            
+            <div id="context-lock-message" class="hidden mt-2 p-2 rounded bg-cyan-950/20 border border-cyan-500/10 text-[10px] text-cyan-400 text-center font-mono">
+              <span class="inline-block animate-pulse w-1.5 h-1.5 bg-cyan-400 rounded-full mr-2"></span>
+              哈希密钥 CTX_NT-2026 安全嵌入内核
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CENTER SECTION: WORKFLOW ORE RAIL & BENTO METRIC GRIDS -->
+      <section class="flex-1 flex flex-col gap-4 min-h-0 relative">
+        
+        <!-- UPPER PART: MAIN STAGES PROGRESS PATH DOCK (Height: 110px) -->
+        <div class="h-[114px] border border-cyan-500/15 bg-[#090e21]/75 backdrop-blur-xl rounded-xl p-3 flex flex-col shrink-0 relative cyber-corners justify-between">
+          <div class="flex items-center justify-between border-b border-slate-800/60 pb-1">
+            <span class="text-[10px] font-mono uppercase text-slate-400 tracking-wider flex items-center gap-2">
+              <i data-lucide="split" class="w-3 h-3 text-cyan-400 animate-pulse"></i>
+              多 Agentic 系统核心工作轨道 Progress Rail
+            </span>
+            <span class="text-[10px] font-mono text-slate-500" id="current-stage-idx-readout">STAGE 0 / 6</span>
+          </div>
+
+          <!-- Glowing Rail Tracker -->
+          <div class="relative flex-1 flex items-center mt-1 select-none w-full">
+            <!-- Background laser conduit track (positioned exactly relative to first and last node centers) -->
+            <div class="absolute left-[8.33%] right-[8.33%] h-1 bg-slate-900 rounded-full z-0"></div>
+            <!-- Dynamic neon flow pipeline filler (positioned exactly relative to first and last node centers) -->
+            <div id="pipeline-progress" class="absolute left-[8.33%] h-1 bg-gradient-to-r from-cyan-500 via-amber-400 to-emerald-400 duration-1000 z-0 shadow-[0_0_8px_rgba(6,182,212,0.4)]" style="width: 0%;"></div>
+
+            <!-- Six equally divided grid cells, each centering its stage node, aligning circles perfectly with the progress bar -->
+            <div class="w-full grid grid-cols-6 relative z-10">
+              <!-- Stage 01 Node -->
+              <div class="flex flex-col items-center stage-node" id="stage-node-0">
+                <div class="relative flex items-center justify-center w-8 h-8 rounded-full border border-slate-700 bg-slate-950 transition-all duration-500 text-slate-400 font-display text-xs font-semibold shadow-inner" id="stage-circle-0">
+                  <span class="z-10 node-num">1</span>
+                  <div class="absolute inset-0 rounded-full border border-cyan-500/30 opacity-0 bg-cyan-500/5 animate-ping" id="stage-pulse-0"></div>
+                </div>
+                <span class="text-[10px] mt-1 text-slate-400 font-medium whitespace-nowrap block" id="stage-label-0">吸收画像</span>
+              </div>
+
+              <!-- Stage 02 Node -->
+              <div class="flex flex-col items-center stage-node" id="stage-node-1">
+                <div class="relative flex items-center justify-center w-8 h-8 rounded-full border border-slate-700 bg-slate-950 transition-all duration-500 text-slate-400 font-display text-xs font-semibold shadow-inner" id="stage-circle-1">
+                  <span class="z-10 node-num">2</span>
+                  <div class="absolute inset-0 rounded-full border border-amber-500/30 opacity-0 bg-amber-500/5 animate-ping" id="stage-pulse-1"></div>
+                </div>
+                <span class="text-[10px] mt-1 text-slate-400 font-medium whitespace-nowrap block" id="stage-label-1">任务拆解</span>
+              </div>
+
+              <!-- Stage 03 Node -->
+              <div class="flex flex-col items-center stage-node" id="stage-node-2">
+                <div class="relative flex items-center justify-center w-8 h-8 rounded-full border border-slate-700 bg-slate-950 transition-all duration-500 text-slate-400 font-display text-xs font-semibold shadow-inner" id="stage-circle-2">
+                  <span class="z-10 node-num">3</span>
+                  <div class="absolute inset-0 rounded-full border border-cyan-500/30 opacity-0 bg-cyan-500/5 animate-ping" id="stage-pulse-2"></div>
+                </div>
+                <span class="text-[10px] mt-1 text-slate-400 font-medium whitespace-nowrap block" id="stage-label-2">协同分析</span>
+              </div>
+
+              <!-- Stage 04 Node -->
+              <div class="flex flex-col items-center stage-node" id="stage-node-3">
+                <div class="relative flex items-center justify-center w-8 h-8 rounded-full border border-slate-700 bg-slate-950 transition-all duration-500 text-slate-400 font-display text-xs font-semibold shadow-inner" id="stage-circle-3">
+                  <span class="z-10 node-num">4</span>
+                  <div class="absolute inset-0 rounded-full border border-purple-500/30 opacity-0 bg-purple-500/5 animate-ping" id="stage-pulse-3"></div>
+                </div>
+                <span class="text-[10px] mt-1 text-slate-400 font-medium whitespace-nowrap block" id="stage-label-3">知识检索</span>
+              </div>
+
+              <!-- Stage 05 Node -->
+              <div class="flex flex-col items-center stage-node" id="stage-node-4">
+                <div class="relative flex items-center justify-center w-8 h-8 rounded-full border border-slate-700 bg-slate-950 transition-all duration-500 text-slate-400 font-display text-xs font-semibold shadow-inner" id="stage-circle-4">
+                  <span class="z-10 node-num">5</span>
+                  <div class="absolute inset-0 rounded-full border border-pink-500/30 opacity-0 bg-pink-500/5 animate-ping" id="stage-pulse-4"></div>
+                </div>
+                <span class="text-[10px] mt-1 text-slate-400 font-medium whitespace-nowrap block" id="stage-label-4">白皮书合成</span>
+              </div>
+
+              <!-- Stage 06 Node -->
+              <div class="flex flex-col items-center stage-node" id="stage-node-5">
+                <div class="relative flex items-center justify-center w-8 h-8 rounded-full border border-slate-700 bg-slate-950 transition-all duration-500 text-slate-400 font-display text-xs font-semibold shadow-inner" id="stage-circle-5">
+                  <span class="z-10 node-num">6</span>
+                  <div class="absolute inset-0 rounded-full border border-emerald-500/30 opacity-0 bg-emerald-500/5 animate-ping" id="stage-pulse-5"></div>
+                </div>
+                <span class="text-[10px] mt-1 text-slate-400 font-medium whitespace-nowrap block" id="stage-label-5">决议输出</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LOWER PART: BENTO MATRIX (Flex Grid splitting detail panel and agent structure) -->
+        <div class="flex-1 grid grid-cols-12 gap-4 min-h-0">
+          
+          <!-- BENTO 01: DETAIL TASK EXECUTION CARD (Col-Span-6) -->
+          <div class="col-span-12 lg:col-span-6 border border-cyan-500/15 bg-[#090e1f]/75 backdrop-blur-xl rounded-xl p-4 flex flex-col min-h-0 relative cyber-corners cyber-corners-bottom">
+            <div class="flex items-center justify-between border-b border-slate-800/60 pb-2 mb-3 shrink-0">
+              <h3 class="font-display font-medium text-xs text-cyan-300 uppercase tracking-wider flex items-center gap-2">
+                <i data-lucide="cpu" class="w-4 h-4 text-cyan-400 animate-spin [animation-duration:8s]"></i>
+                当前阶段微任务执行序列 Detail Tasks
+              </h3>
+              <span class="text-[10px] font-mono text-slate-400 shrink-0" id="current-task-ratio-text">未开始</span>
+            </div>
+
+            <!-- Steps Queue layout container -->
+            <div class="flex-1 overflow-y-auto narrow-scroll space-y-3 min-h-0 pr-1 py-1" id="stage-tasks-queue">
+              <!-- Placeholder screen displayed initially -->
+              <div id="queue-placeholder" class="absolute inset-0 flex flex-col items-center justify-center text-center p-6 text-slate-500 z-10 select-none">
+                <i data-lucide="play-circle" class="w-12 h-12 text-slate-700 mb-2 animate-pulse"></i>
+                <p class="text-xs font-mono">等待注入企业信息并启动系统轨道</p>
+                <p class="text-[10px] mt-1 text-slate-600">AastraConsult Command Deck System 1.0</p>
+              </div>
+
+              <!-- Content templates inject inside dynamically via loadStageTasks() -->
+            </div>
+
+            <!-- Terminal output logging at bottom of card -->
+            <div class="h-28 mt-3 border border-slate-800/80 bg-black/80 rounded-lg p-3 shrink-0 select-text flex flex-col min-h-0">
+              <span class="text-[9px] font-mono text-slate-500 uppercase flex items-center justify-between border-b border-slate-900 pb-1.5 shrink-0 block">
+                <span>实时运算指令日志 Stream Logging</span>
+                <span class="inline-block px-1 rounded bg-[#10b981]/10 text-[#10b981] animate-pulse">内核监视器 ACTIVE</span>
+              </span>
+              <div class="flex-1 overflow-y-auto narrow-scroll font-mono text-[10px] text-emerald-400 space-y-1 pt-1.5" id="terminal-mini-logs">
+                <div class="text-slate-500">[SYSTEM] AstraConsult 驱动内核准备就绪。等待输入指令...</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- BENTO 02: MULTI-AGENT COLLABORATION NETWORK ARENA (Col-Span-6) -->
+          <div class="col-span-12 lg:col-span-6 border border-cyan-500/15 bg-[#090e1f]/75 backdrop-blur-xl rounded-xl p-4 flex flex-col min-h-0 relative cyber-corners cyber-corners-bottom" id="agent-network-container">
+            <!-- Canvas underneath cards for dynamic energy connections -->
+            <canvas id="agent-canvas" class="absolute inset-0 pointer-events-none z-0"></canvas>
+            
+            <div class="relative z-10 flex items-center justify-between gap-4 border-b border-slate-800/60 pb-2 mb-3 shrink-0 flex-nowrap">
+              <h3 class="font-display font-medium text-xs text-cyan-300 uppercase tracking-wider flex items-center gap-2 truncate whitespace-nowrap">
+                <i data-lucide="network" class="w-4 h-4 text-cyan-400 animate-pulse shrink-0"></i>
+                <span>多 Agentic 智能协同核心</span>
+              </h3>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800/80 text-cyan-400 border border-cyan-500/10 whitespace-nowrap shrink-0" id="agent-ticker-action">协作网络就绪</span>
+            </div>
+
+            <!-- Grid displaying 9 Agent hexagonal cards with responsive flexes -->
+            <div class="relative z-10 flex-1 grid grid-cols-3 gap-3 min-h-0 items-center select-none" id="agent-nodes-grid">
+              
+              <!-- Agent 01: Planner -->
+              <div class="agent-node flex flex-col items-center justify-center p-2 rounded-lg bg-slate-950/40 border border-slate-800/60 transition-all duration-300" data-agent-id="Planner">
+                <div class="w-9 h-9 rounded-full bg-[#1e1b4b] border border-[#4f46e5]/40 flex items-center justify-center text-[#818cf8] mb-1 hover:scale-105 duration-300 shadow-[0_0_8px_rgba(79,70,229,0.15)] ring-inner-node">
+                  <i data-lucide="kanban-square" class="w-5 h-5"></i>
+                </div>
+                <span class="text-[10px] font-semibold text-slate-200">Planner Agent</span>
+                <span class="text-[8px] text-slate-500 font-mono scale-95 uppercase">全局统筹</span>
+              </div>
+
+              <!-- Agent 02: Strategy -->
+              <div class="agent-node flex flex-col items-center justify-center p-2 rounded-lg bg-slate-950/40 border border-slate-800/60 transition-all duration-300" data-agent-id="Strategy">
+                <div class="w-9 h-9 rounded-full bg-[#0c1a2c] border border-cyan-500/30 flex items-center justify-center text-cyan-400 mb-1 hover:scale-105 duration-300">
+                  <i data-lucide="compass" class="w-5 h-5"></i>
+                </div>
+                <span class="text-[10px] font-semibold text-slate-200">Strategy Agent</span>
+                <span class="text-[8px] text-slate-500 font-mono scale-95 uppercase">战略推演</span>
+              </div>
+
+              <!-- Agent 03: Finance -->
+              <div class="agent-node flex flex-col items-center justify-center p-2 rounded-lg bg-slate-950/40 border border-slate-800/60 transition-all duration-300" data-agent-id="Finance">
+                <div class="w-9 h-9 rounded-full bg-[#061e14] border border-[#10b981]/30 flex items-center justify-center text-[#10b981] mb-1 hover:scale-105 duration-300">
+                  <i data-lucide="trending-up" class="w-5 h-5"></i>
+                </div>
+                <span class="text-[10px] font-semibold text-slate-200">Finance Agent</span>
+                <span class="text-[8px] text-slate-500 font-mono scale-95 uppercase">价值核算</span>
+              </div>
+
+              <!-- Agent 04: Operations -->
+              <div class="agent-node flex flex-col items-center justify-center p-2 rounded-lg bg-slate-950/40 border border-slate-800/60 transition-all duration-300" data-agent-id="Operations">
+                <div class="w-9 h-9 rounded-full bg-[#1c1917] border border-[#d97706]/30 flex items-center justify-center text-[#f59e0b] mb-1 hover:scale-105 duration-300">
+                  <i data-lucide="factory" class="w-5 h-5"></i>
+                </div>
+                <span class="text-[10px] font-semibold text-slate-200">Operation Agent</span>
+                <span class="text-[8px] text-slate-500 font-mono scale-95 uppercase">生产运营</span>
+              </div>
+
+              <!-- Agent 05: Risk -->
+              <div class="agent-node flex flex-col items-center justify-center p-2 rounded-lg bg-slate-950/40 border border-slate-800/60 transition-all duration-300" data-agent-id="Risk">
+                <div class="w-9 h-9 rounded-full bg-[#1c161a] border border-[#ef4444]/30 flex items-center justify-center text-[#ef4444] mb-1 hover:scale-105 duration-300">
+                  <i data-lucide="shield-alert" class="w-5 h-5"></i>
+                </div>
+                <span class="text-[10px] font-semibold text-slate-200">Risk Agent</span>
+                <span class="text-[8px] text-slate-500 font-mono scale-95 uppercase">安全合规</span>
+              </div>
+
+              <!-- Agent 06: Retrieval -->
+              <div class="agent-node flex flex-col items-center justify-center p-2 rounded-lg bg-slate-950/40 border border-slate-800/60 transition-all duration-300" data-agent-id="Retrieval">
+                <div class="w-9 h-9 rounded-full bg-[#18131d] border border-fuchsia-500/30 flex items-center justify-center text-fuchsia-400 mb-1 hover:scale-105 duration-300">
+                  <i data-lucide="search-code" class="w-5 h-5"></i>
+                </div>
+                <span class="text-[10px] font-semibold text-slate-200">Retrieval Agent</span>
+                <span class="text-[8px] text-slate-500 font-mono scale-95 uppercase">知识检索</span>
+              </div>
+
+              <!-- Agent 07: Writing -->
+              <div class="agent-node flex flex-col items-center justify-center p-2 rounded-lg bg-slate-950/40 border border-slate-800/60 transition-all duration-300" data-agent-id="Writing">
+                <div class="w-9 h-9 rounded-full bg-[#1e1420] border border-pink-500/30 flex items-center justify-center text-pink-400 mb-1 hover:scale-105 duration-300">
+                  <i data-lucide="file-signature" class="w-5 h-5"></i>
+                </div>
+                <span class="text-[10px] font-semibold text-slate-200">Writing Agent</span>
+                <span class="text-[8px] text-slate-500 font-mono scale-95 uppercase">方案草拟</span>
+              </div>
+
+              <!-- Agent 08: Review -->
+              <div class="agent-node flex flex-col items-center justify-center p-2 rounded-lg bg-[#070e17] border border-slate-800/60 transition-all duration-300" data-agent-id="Review">
+                <div class="w-9 h-9 rounded-full bg-[#10192d] border border-blue-500/30 flex items-center justify-center text-blue-400 mb-1 hover:scale-105 duration-300">
+                  <i data-lucide="check-square" class="w-5 h-5"></i>
+                </div>
+                <span class="text-[10px] font-semibold text-slate-200">Review Agent</span>
+                <span class="text-[8px] text-slate-500 font-mono scale-95 uppercase">决策校验</span>
+              </div>
+
+              <!-- Agent 09: Synthesizer -->
+              <div class="agent-node flex flex-col items-center justify-center p-2 rounded-lg bg-slate-950/40 border border-slate-800/60 transition-all duration-300" data-agent-id="Synthesizer">
+                <div class="w-9 h-9 rounded-full bg-[#1f1b14] border border-amber-500/30 flex items-center justify-center text-[#ffc107] mb-1 hover:scale-105 duration-300">
+                  <i data-lucide="combine" class="w-5 h-5"></i>
+                </div>
+                <span class="text-[10px] font-semibold text-slate-200">Synthesizer</span>
+                <span class="text-[8px] text-slate-500 font-mono scale-95 uppercase">摘要提炼</span>
+              </div>
+
+            </div>
+
+            <!-- Visual instructions linking agents together for audiences -->
+            <div class="mt-3 py-1 bg-slate-950/30 border border-slate-900/40 rounded flex items-center justify-around font-mono text-[9px] text-slate-500 select-none shrink-0 text-center">
+              <span>● 双向数据总线已激活</span>
+              <span>● 高置信度融合通道</span>
+              <span>● 多点协同决策网面 5.0Ghz</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- RIGHT SECTION: KNOWLEDGE RETRIEVAL HUB & EXECUTIVE REPORTS -->
+      <section class="w-full lg:w-[360px] flex flex-col gap-4 h-full min-h-0 shrink-0 relative">
+        
+        <!-- UPPER BAR: INDUSTRIAL KNOWLEDGE HUB (40% Height space) -->
+        <div class="h-[40%] min-h-[200px] border border-cyan-500/15 bg-[#090e1f]/80 backdrop-blur-xl rounded-xl p-4 flex flex-col min-h-0 relative cyber-corners cyber-corners-bottom">
+          <div class="flex items-center justify-between border-b border-cyan-500/10 pb-2 mb-3 shrink-0">
+            <h3 class="font-display font-medium text-xs text-cyan-300 uppercase tracking-wider flex items-center gap-2">
+              <i data-lucide="server" class="w-4 h-4 text-cyan-400"></i>
+              工业知识索引云库
+            </h3>
+            <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-950/40 text-emerald-400 border border-emerald-500/15 uppercase flex items-center gap-1">
+              <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+              在线 Cloud
+            </span>
+          </div>
+
+          <div class="flex-1 flex gap-3 min-h-0 items-center justify-between">
+            <!-- Spinning HUD radar disk -->
+            <div class="relative w-16 h-16 flex items-center justify-center shrink-0">
+              <div class="absolute inset-0 border border-dashed border-cyan-500/30 rounded-full animate-spin [animation-duration:12s]"></div>
+              <div class="absolute inset-1 border border-solid border-cyan-400/10 rounded-full"></div>
+              <div class="absolute inset-2 border border-dashed border-amber-400/40 rounded-full animate-spin [animation-duration:8s] [animation-direction:reverse]"></div>
+              <div class="absolute w-1.5 h-1.5 bg-cyan-400 rounded-full animate-ping"></div>
+              <i data-lucide="orbit" class="w-5 h-5 text-cyan-400 relative z-10 animate-pulse"></i>
+            </div>
+
+            <!-- Dynamic count block -->
+            <div class="flex-1">
+              <div class="bg-black/40 border border-slate-800/80 rounded-lg p-2.5 flex items-center gap-3">
+                <div class="shrink-0 text-center px-1">
+                  <span class="block text-[8px] font-mono text-slate-500 uppercase">检索片段</span>
+                  <span id="retrieved-fragments-count" class="block text-2xl font-display font-bold text-cyan-400 tracking-tight leading-none mt-1">0</span>
+                </div>
+                <div class="flex-1 text-[9.5px] leading-relaxed text-slate-400 border-l border-slate-800 pl-2.5">
+                  <span class="font-semibold text-slate-300">AastraConsult RAG 引擎:</span>
+                  <div class="text-[9px] mt-0.5 text-slate-500 font-mono truncate" id="retrieval-source-title">数据库待命</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hot retrieved knowledge tags -->
+          <div class="mt-3 shrink-0">
+            <div class="flex flex-wrap gap-1.5 max-h-[70px] overflow-hidden justify-start" id="knowledge-badge-list">
+              <span class="text-[8px] font-mono px-1.5 py-0.5 rounded border border-slate-800 bg-slate-900/50 text-slate-500">物料质检 AI 模型 (v4.2)</span>
+              <span class="text-[8px] font-mono px-1.5 py-0.5 rounded border border-slate-800 bg-slate-900/50 text-slate-500">精益制造 ISO-9001 规范</span>
+              <span class="text-[8px] font-mono px-1.5 py-0.5 rounded border border-slate-800 bg-slate-900/50 text-slate-500">设备综合效率 (OEE) 基准</span>
+              <span class="text-[8px] font-mono px-1.5 py-0.5 rounded border border-slate-800 bg-slate-900/50 text-slate-500">大模型可信数据白皮书</span>
+              <span class="text-[8px] font-mono px-1.5 py-0.5 rounded border border-slate-800 bg-slate-900/50 text-slate-500">三一重工 AI ROI 测算</span>
+              <span class="text-[8px] font-mono px-1.5 py-0.5 rounded border border-slate-800 bg-slate-900/50 text-slate-500">高集成数据网根规范</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- LOWER BAR: BOARD READY STRATEGY OUTPUT REPORT (60% Height space, high luxury neon border-amber) -->
+        <div class="flex-1 border border-amber-500/15 bg-gradient-to-b from-[#0e162a]/95 to-[#060a14]/95 backdrop-blur-xl rounded-xl p-4 flex flex-col min-h-0 relative gold-corners shadow-[0_12px_44px_rgba(0,0,0,0.7)]">
+          <div class="flex items-center justify-between border-b border-amber-500/15 pb-2 mb-3 shrink-0">
+            <h3 class="font-display font-medium text-xs text-amber-400 uppercase tracking-wider flex items-center gap-2">
+              <i data-lucide="award" class="w-4 h-4 text-amber-400"></i>
+              董事会决策层战略白皮书 Draft Output
+            </h3>
+            <span id="report-digital-badge" class="text-[8px] font-mono px-1.5 py-0.5 rounded border border-slate-800 bg-slate-950/60 text-slate-500 uppercase tracking-widest leading-none">未合拢</span>
+          </div>
+
+          <!-- Report streaming area with TYPEWRITER effect -->
+          <div class="flex-1 overflow-y-auto narrow-scroll pr-1 pb-4 text-xs font-sans leading-relaxed text-slate-300 relative select-text" id="report-output-arena">
+            
+            <!-- Default idle standby visual frame -->
+            <div id="report-idle-frame" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center text-slate-500 select-none">
+              <div class="relative w-12 h-12 flex items-center justify-center mb-2">
+                <div class="absolute inset-0 border border-amber-500/10 rounded-full animate-ping"></div>
+                <i data-lucide="file-text" class="w-8 h-8 text-amber-500/30"></i>
+              </div>
+              <h4 class="text-xs font-semibold text-slate-400">BOARD-READY STRATEGY DECK</h4>
+              <p class="text-[10px] text-slate-500 mt-1 uppercase max-w-[200px] leading-relaxed">等待工作轨道推进至第06阶段「决议输出」即可揭开实时报告</p>
+            </div>
+
+            <!-- Dynamic Typed Sections. Kept simple and perfectly styled. Hidden by default. -->
+            <div id="report-stream-content" class="space-y-4 pr-1 hidden">
+              
+              <!-- Segment A: Title Panel -->
+              <div id="report-sec-a" class="opacity-0 transition-opacity duration-1000">
+                <div class="text-right text-[8px] font-mono text-amber-400 shadow-sm leading-none flex items-center justify-end gap-1 mb-1">
+                  <span class="w-1.5 h-1.5 bg-amber-400 rounded-full animate-ping inline-block"></span>
+                  <span>CONFIDENTIAL | CLASSIFIED</span>
+                </div>
+                <h1 class="text-lg font-display font-bold text-white tracking-tight leading-tight border-b border-amber-500/20 pb-2 flex items-center gap-2">
+                  <span class="text-sm px-1.5 py-0.5 bg-amber-400 text-[#0c0f16] font-display font-bold rounded">TOP</span>
+                  《NovaTech 先进制造 AI 转型决策红皮书》
+                </h1>
+              </div>
+
+              <!-- Segment B: Executive Summary -->
+              <div id="report-sec-b" class="opacity-0 transition-opacity duration-1000 bg-slate-950/30 border border-slate-900/60 rounded p-3 text-slate-300 prose prose-invert font-sans leading-relaxed text-[11px]">
+                <h2 class="text-[10px] font-mono text-amber-400 uppercase tracking-wide mb-1 flex items-center gap-1.5">
+                  <i data-lucide="book-open" class="w-3.5 h-3.5"></i> 01 决策层一站式汇报摘要 Executive Summary
+                </h2>
+                <p id="type-writer-summary-target">加载报告数据流中...</p>
+              </div>
+
+              <!-- Segment C: ROI Value Pools dashboard -->
+              <div id="report-sec-c" class="opacity-0 transition-opacity duration-1000">
+                <h2 class="text-[10px] font-mono text-cyan-400 uppercase tracking-wide mb-2 flex items-center gap-1.5">
+                  <i data-lucide="bar-chart-3" class="w-3.5 h-3.5"></i> 02 首期技改价值估估分析 Impact Metrics
+                </h2>
+                <table class="w-full text-[10px] font-mono bg-[#050914]/60 border border-slate-900 rounded-lg">
+                  <tbody>
+                    <!-- Row 1: Cost Reduction -->
+                    <tr class="border-b border-slate-900/60">
+                      <td class="p-2 text-slate-400 w-32">运营本钱降幅 Cost</td>
+                      <td class="p-2">
+                        <div class="flex items-center gap-3">
+                          <div class="flex-1 h-2 bg-slate-900 rounded-full overflow-hidden">
+                            <div id="chart-bar-0" class="h-full bg-amber-400 duration-1000 rounded-full shadow-[0_0_6px_#fbbf24]" style="width: 0%;"></div>
+                          </div>
+                          <span class="text-amber-400 font-semibold text-[11px] font-display w-10 text-right">-18.4%</span>
+                        </div>
+                      </td>
+                    </tr>
+                    <!-- Row 2: FPY Yield -->
+                    <tr class="border-b border-slate-900/60">
+                      <td class="p-2 text-slate-400 w-32">出厂质检提高 Yield</td>
+                      <td class="p-2">
+                        <div class="flex items-center gap-3">
+                          <div class="flex-1 h-2 bg-slate-900 rounded-full overflow-hidden">
+                            <div id="chart-bar-1" class="h-full bg-cyan-400 duration-1000 rounded-full shadow-[0_0_6px_#06b6d4]" style="width: 0%;"></div>
+                          </div>
+                          <span class="text-cyan-400 font-semibold text-[11px] font-display w-10 text-right">99.7%</span>
+                        </div>
+                      </td>
+                    </tr>
+                    <!-- Row 3: Decision Time -->
+                    <tr>
+                      <td class="p-2 text-slate-400 w-32">决策流时效 Lead-time</td>
+                      <td class="p-2">
+                        <div class="flex items-center gap-3">
+                          <div class="flex-1 h-2 bg-slate-900 rounded-full overflow-hidden">
+                            <div id="chart-bar-2" class="h-full bg-purple-400 duration-1000 rounded-full shadow-[0_0_6px_#a855f7]" style="width: 0%;"></div>
+                          </div>
+                          <span class="text-purple-400 font-semibold text-[11px] font-display w-10 text-right">7.2s</span>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Segment D: Three stage milestones -->
+              <div id="report-sec-d" class="opacity-0 transition-opacity duration-1000 space-y-2">
+                <h2 class="text-[10px] font-mono text-purple-400 uppercase tracking-wide mb-1 flex items-center gap-1.5">
+                  <i data-lucide="calendar" class="w-3.5 h-3.5"></i> 03 落地敏捷发展路径图 Roadmap Flow
+                </h2>
+                
+                <div class="space-y-2 relative pl-3 border-l border-slate-800">
+                  <!-- Day 1-30 -->
+                  <div class="relative card-flow">
+                    <span class="absolute -left-4.5 top-1.5 w-2 h-2 rounded-full bg-amber-400 ring-4 ring-amber-400/10"></span>
+                    <span class="text-[10px] font-mono text-amber-400 font-semibold block">阶段一 (Day 1-30)：局部装配质量智能化质检试点</span>
+                    <span class="text-[9.5px] text-slate-400 block mt-0.5">上线精密边缘边缘感应摄像机，代替手工检测，缩减耗损 15%</span>
+                  </div>
+                  <!-- Day 31-60 -->
+                  <div class="relative card-flow">
+                    <span class="absolute -left-4.5 top-1.5 w-2 h-2 rounded-full bg-cyan-400 ring-4 ring-cyan-400/10"></span>
+                    <span class="text-[10px] font-mono text-cyan-400 font-semibold block">阶段二 (Day 31-60)：异构数据层打通 & 本地模型部署</span>
+                    <span class="text-[9.5px] text-slate-400 block mt-0.5">接入既有 ERP 数据网，建立私有化可信大模型安全治理沙箱</span>
+                  </div>
+                  <!-- Day 61-90 -->
+                  <div class="relative card-flow">
+                    <span class="absolute -left-4.5 top-1.5 w-2 h-2 rounded-full bg-emerald-400 ring-4 ring-emerald-400/10"></span>
+                    <span class="text-[10px] font-mono text-emerald-400 font-semibold block">阶段三 (Day 61-90)：董事会实时智能化指挥驾驶舱投产</span>
+                    <span class="text-[9.5px] text-slate-400 block mt-0.5">大屏无缝集成高优先情报分析，决策响应全流程一键提炼</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Segment E: Risk containment check -->
+              <div id="report-sec-e" class="opacity-0 transition-opacity duration-1000 bg-[#ef4444]/5 border border-[#ef4444]/15 rounded p-2.5 text-[9.5px] text-slate-400">
+                <span class="font-mono text-[#ef4444] font-semibold flex items-center gap-1 mb-0.5 uppercase">
+                  <i data-lucide="shield-check" class="w-3 h-3"></i> 04 安全保护机制验证 Security Controls
+                </span>
+                安全合规专家 (Risk Agent) 已全渠道铸起数据安全网，私有专利及配方数据在完全隔离沙箱中运算，完全免疫核心工艺泄露风险。
+              </div>
+
+              <!-- Segment F: Professional stamp certificate -->
+              <div id="report-sec-f" class="opacity-0 transition-opacity duration-1000 text-center pt-3 border-t border-slate-800 shrink-0">
+                <div class="inline-block border border-amber-500/30 bg-amber-400/5 px-4 py-2.5 rounded-lg border-dashed text-center relative overflow-hidden select-none hover:border-amber-500 transition-all duration-300">
+                  <span class="text-[11px] font-display font-bold text-amber-400 tracking-wider text-center block neon-text-gold">BOARD-READY STRATEGY SECURED</span>
+                  <p class="text-[8px] font-mono text-slate-500 mt-1 uppercase text-center">AstraConsult Global Certification Center 签署认可授权</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- BOTTOM COMMAND CONTROL DOCK (Height: 64px) -->
+    <footer class="h-16 shrink-0 bg-[#04060d] border-t border-slate-800/80 px-6 flex items-center justify-between relative z-30 backdrop-blur-md">
+      <div>
+        <span class="text-[10px] text-slate-500 font-mono tracking-wider block font-medium">ASTRA OPERATING DECK</span>
+        <div class="flex items-center gap-1.5 text-xs text-slate-300">
+          <span class="inline-block w-2 h-2 rounded-full bg-cyan-500 animate-pulse"></span>
+          <span>工作轨迹控制区 Control Room</span>
+        </div>
+      </div>
+
+      <!-- Action and stage pushing controllers -->
+      <div class="flex items-center gap-4">
+        <!-- Next Stage Trigger -->
+        <button id="btn-next-stage" onclick="goNextStage()" disabled class="shiny-button px-6 py-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-500 font-display font-medium text-xs flex items-center gap-2 duration-300 select-none cursor-not-allowed">
+          <span>进入下一个流程轨道</span>
+          <i data-lucide="chevrons-right" class="w-4 h-4 text-slate-500 font-bold" id="next-stage-icon"></i>
+        </button>
+        
+        <!-- Reset demo workspace -->
+        <button onclick="resetDemo()" class="p-2 rounded-lg border border-slate-800 bg-slate-950/40 hover:bg-slate-900 hover:border-slate-700 text-slate-400 hover:text-white transition-all duration-200" title="重置演示" id="btn-reset">
+          <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+        </button>
+
+        <!-- Dynamic Fullscreen Mode toggler -->
+        <button id="btn-fullscreen" onclick="requestFullscreen()" class="p-2 rounded-lg border border-slate-800 bg-slate-950/40 hover:bg-slate-900 hover:border-slate-700 text-slate-400 hover:text-white transition-all duration-200" title="投影仪全屏展示" id="btn-fs">
+          <i data-lucide="maximize" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Quick credits tag in HUD style -->
+      <div class="hidden sm:block">
+        <span class="text-[9px] text-slate-500 font-mono tracking-widest uppercase block text-right">RELEASE-READY KEYNOTE V2</span>
+        <span class="text-[9px] text-[#06b6d4] font-mono block text-right">GLOBAL PLATFORM DEPLOYED</span>
+      </div>
+    </footer>
+
+
+    <!-- DETAILED JAVASCRIPT LOGIC DIRECTORY -->
+    <script>
+      // ----------------------------------------------------
+      // GLOBAL STATE CONFIGURATION MATRIX
+      // ----------------------------------------------------
+      const STAGES = [
+        {
+          id: "context",
+          name: "01 企业画像吸收",
+          enName: "Context Intake",
+          accent: "cyan",
+          tasks: [
+            { name: "提取 NovaTech 主核实物属性参数", detail: "载入主数据结构框... 解析组织关系矩阵", duration: 1200, activeAgents: ["Planner"], log: "提取完成：NovaTech 制造集团, 规模: 860人, 营收: $128M" },
+            { name: "提取集成痛点资产挑战列表", detail: "发现四级重型工业阻抗：旧物理连线高耗损、人工质检延迟、决策链后滞", duration: 1500, activeAgents: ["Strategy", "Operations"], log: "核心映射： Fragmented Data, Manual Quality Inspection, Reporting Outdated" },
+            { name: "重塑顶层可降解战略优化目标", detail: "定义董事会降本边界 (Cost -15%), 秒级战略响应, 一体质能质检飞轮", duration: 1300, activeAgents: ["Planner", "Strategy"], log: "战略绑定完成： 构建智能工业大脑 TCO 诊断引擎" },
+            { name: "工业合规性与数据共享审计边界", detail: "检索国家多维数据处理边界与安全网规范隔离策略", duration: 1100, activeAgents: ["Risk"], log: "限制检验： 对齐 ISO-9001 高可用信息安全性保障" },
+            { name: "铸造唯一上下文哈希密钥并注入", detail: "对输入参数计算唯一上下文特征值，装入虚拟分析空间", duration: 1200, activeAgents: ["Planner"], log: "上下文哈希就绪: SHA256[CTX-NT-2026] 已封入核心安全栈" }
+          ]
+        },
+        {
+          id: "decomposition",
+          name: "02 咨询任务智能拆解",
+          enName: "Task Decomposition",
+          accent: "gold",
+          tasks: [
+            { name: "Planner Agent 智能接管任务规划", detail: "构建高密自适应流程图树，划定核心协同主干道", duration: 1200, activeAgents: ["Planner"], log: "规划引擎： 拆解为 A质检/B财务/C合规 三条并行轨" },
+            { name: "配置三极并行研究与论证流条", detail: "建立机器视觉回报测算组、设备预测维护评估组等专题子计划", duration: 1400, activeAgents: ["Planner", "Strategy"], log: "系统轨道初始化完毕: 3 轨对开并发算力配置成功" },
+            { name: "精密算力分流与核心 Agent 编排", detail: "启动 Strategy, Finance, Operation 席位分配和资源注册", duration: 1200, activeAgents: ["Planner", "Strategy", "Finance", "Operations", "Risk"], log: "多智能体总线分配: 专家 Agent 主线编排全域注册" },
+            { name: "初始化最终咨询成果演示大纲", detail: "构建大图景战略书的 5 个章节架构以及对应 ROI 估值树", duration: 1300, activeAgents: ["Writing"], log: "报告蓝图初始化成功: 白皮书章节及表格骨架注入完毕" },
+            { name: "加载先进制造垂类标尺比对基准", detail: "拉取 [垂直细分高端制造 AI 转型成熟度指数 v3.0] 基底参数", duration: 1100, activeAgents: ["Retrieval"], log: "背景注入： 加载工业智能算法收益收敛基准比" }
+          ]
+        },
+        {
+          id: "analysis",
+          name: "03 多 Agent 协同分析",
+          enName: "Agent Analysis",
+          accent: "blue",
+          tasks: [
+            { name: "Strategy Agent 战略优化路径推演", detail: "审视装配生产流程瓶颈优先权，确立高敏捷切入靶向", duration: 1600, activeAgents: ["Strategy", "Synthesizer"], log: "推演结论： 视觉边缘质量质检为最速见效点，其次为实时决策驾驶舱" },
+            { name: "Finance Agent 首期价值池财务测算", detail: "分析装配线物料损耗及人力替换成本曲线，校核首年节约参数", duration: 1800, activeAgents: ["Finance", "Synthesizer"], log: "财务预测： 首期技改可缩减运营损耗约 $8.6M - $18.4M, 回报率 142%" },
+            { name: "Operations Agent 生产流瓶颈深度定位", detail: "梳理装配车间运转图谱，精准归纳瓶颈导致的机器空转时长", duration: 1600, activeAgents: ["Operations", "Synthesizer"], log: "定位成果： 瓶颈聚集于四号重装线，AI 介入后节拍平均缩减 42s" },
+            { name: "Risk Agent 数据治理与防外泄等级审计", detail: "评测异构 ERP 总线集成下的技术壁垒与敏感数据沙箱隔热度", duration: 1400, activeAgents: ["Risk"], log: "合规建议： 采用厂房局域离线运行态，隔绝主业务数据泄漏风险" },
+            { name: "交叉评议：自动校核冲突，汇合脑图", detail: "全网对齐分析矛盾，进行价值与阻碍的帕累托平衡决策", duration: 1400, activeAgents: ["Planner", "Synthesizer"], log: "多智能体融会： 战略大纲评议对齐完毕，置信度达到 98.4%" }
+          ]
+        },
+        {
+          id: "retrieval",
+          name: "04 知识检索与案例匹配",
+          enName: "Knowledge Retrieval",
+          accent: "purple",
+          tasks: [
+            { name: "建立与端侧工业向量数据库实时信道", detail: "开启 RAG 安全检索网关，全并发读取索引词林", duration: 1200, activeAgents: ["Retrieval"], log: "连接检索云港: [AstraConsult Vector Cloud] 握手成功..." },
+            { name: "检索匹配大型制造类似质改变标杆", detail: "匹配相似条件：营收破亿 + 高端装配自动化 + 工业大脑", duration: 1500, activeAgents: ["Retrieval", "Strategy"], log: "命中标杆案例： 西门子安贝格工厂机器视觉质检验收范文 (2025)" },
+            { name: "定位 ROI 工研计算典型投资回收模型", detail: "提炼同类工厂在物料耗损、备件寿命预测等维度的核心回归方程", duration: 1300, activeAgents: ["Retrieval", "Finance"], log: "命中核心效益基准： 备件磨损预测精度平推突破 94.7%" },
+            { name: "拉取最新可信制造安全接入管理框架", detail: "加载针对大语言模型工业制造生产链本地接入的合规监管文件", duration: 1100, activeAgents: ["Retrieval", "Risk"], log: "命中合规法规： 提取《先进制造智能工厂安全接入合规目录》" },
+            { name: "完成 42 个检索知识碎片的高频聚合", detail: "进行向量聚类，封装成特制知识包，全速传递至撰写层", duration: 1400, activeAgents: ["Retrieval", "Synthesizer"], log: "聚合碎片： 提炼 42 面相关性咨询印信，完成知识对齐导入" }
+          ]
+        },
+        {
+          id: "synthesis",
+          name: "05 咨询白皮书方案合成",
+          enName: "Report Synthesis",
+          accent: "pink",
+          tasks: [
+            { name: "Writing Agent 高带宽起草核心大纲", detail: "汇编前列 Agent 全量分析结论与案例基准，开始编织战略大图", duration: 1600, activeAgents: ["Writing"], log: "报告起草： 已生成 NovaTech AI 先进制造路线一、二章完整大纲" },
+            { name: "精编 30-60-90天敏捷飞轮推进步长", detail: "从一期试点装配四线，到二期大模型局域网隔离部署的全盘编排", duration: 1400, activeAgents: ["Writing", "Strategy"], log: "流程编排： 三阶段可落地行动飞轮时间线配置完结" },
+            { name: "Review Agent 逻辑一致性与可行性会审", detail: "自动化审查报告，验证投资测算及数据安全是否超出企业边界", duration: 1500, activeAgents: ["Review", "Risk"], log: "一致性验证： 财务公式校验比对 100% 成功，方案无矛盾抵触" },
+            { name: "Synthesizer Agent 融合熔炼高层专报", detail: "用金字塔极简叙事提炼顶层摘要，保障大屏投影下的决策爆破力", duration: 1300, activeAgents: ["Synthesizer", "Writing"], log: "结构优化： 决策摘要完成极简重组，适合高层秒级战略研判" },
+            { name: "铸造唯一数字水印和签名认证绿签", detail: "打上董事会提交级密章，注入全网溯源校验标签", duration: 1200, activeAgents: ["Writing", "Review"], log: "徽章授权: 颁发数字安全认证封印 SHA-SIGN[AstraConsult_Ready]" }
+          ]
+        },
+        {
+          id: "report",
+          name: "06 董事会终期报告生成",
+          enName: "Final Report",
+          accent: "green",
+          tasks: [
+            { name: "系统连接客户端多維视图解码层", detail: "解密终期咨询白皮书主干，搭建前台流式呈现模板", duration: 1200, activeAgents: ["Writing", "Synthesizer"], log: "前台握手： HTML流式布局引擎挂载就绪，装填看板数据..." },
+            { name: "流式排版并打印核心成效仪表盘", detail: "加载动态成效测算组件，启动柱状收益比例动效", duration: 1500, activeAgents: ["Writing", "Finance"], log: "渲染成效： 出厂合规提高至 99.7%，决策时效进入秒级时代" },
+            { name: "绘制 90 天滚动敏捷发展飞轮路线图", detail: "逐级展开 30 天起步里程碑，形成清晰大场景实施作战地图", duration: 1300, activeAgents: ["Writing", "Strategy"], log: "路线输出： 大图景观 90 天飞轮递进渲染完毕" },
+            { name: "铸造金牌安全准入章，完美闭环", detail: "最终版权保护验证！董事会级 AI 转型决策红皮书安全合拢！", duration: 1400, activeAgents: ["Review"], log: "签名落成： BOARD-READY REPORT GENERATED。报告完整合拢！" }
+          ]
+        }
+      ];
+
+      // Dynamic metrics list for RAG sources to rotate
+      const KNOWLEDGE_SOURCES = [
+        "先进制造智能边缘质检 RAG v4.1", 
+        "国家工业自动化标准 ISO-9001 AI 对齐白皮书", 
+        "西门子机器视觉工业质检验收案例分析", 
+        "高端重工业 Predictive Maintenance 回归指标数据库",
+        "大模型私有局域数据保护隔离指引框架",
+        "库卡柔性质检验收 ROI 金融预测模型 (2025)",
+        "先进制造数据湖高频异构协议互操作性规约"
+      ];
+
+      // Initial interactive state
+      let state = {
+        hasContext: false,
+        currentStageIndex: -1,
+        currentTaskIndex: -1,
+        isStageRunning: false,
+        isWorkflowComplete: false,
+        tokenCount: 0,
+        confidence: 0,
+        activeAgents: [],
+        knowledgeFragments: 0,
+        activeTimers: []
+      };
+
+      // ----------------------------------------------------
+      // BACKGROUND ANIMATION LOOP ENGINE (STAR & NODE RAYS)
+      // ----------------------------------------------------
+      const bgCanvas = document.getElementById('bg-canvas');
+      const bgCtx = bgCanvas?.getContext('2d');
+      let stars = [];
+      const STAR_COUNT = 65;
+
+      function resizeCanvases() {
+        const dpr = window.devicePixelRatio || 1;
+        if (bgCanvas) {
+          bgCanvas.width = window.innerWidth * dpr;
+          bgCanvas.height = window.innerHeight * dpr;
+          bgCanvas.style.width = window.innerWidth + 'px';
+          bgCanvas.style.height = window.innerHeight + 'px';
+          bgCtx?.scale(dpr, dpr);
+        }
+      }
+
+      function initBackgroundStars() {
+        stars = [];
+        for (let i = 0; i < STAR_COUNT; i++) {
+          stars.push({
+            x: Math.random() * window.innerWidth,
+            y: Math.random() * window.innerHeight,
+            size: Math.random() * 1.5 + 0.5,
+            speed: Math.random() * 0.15 + 0.05,
+            opacity: Math.random() * 0.5 + 0.2
+          });
+        }
+      }
+
+      function animateBackdrops() {
+        if (!bgCtx) return;
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        bgCtx.clearRect(0, 0, w, h);
+
+        // Draw HUD lines and tech circles in the screen background
+        bgCtx.strokeStyle = 'rgba(99, 102, 241, 0.04)';
+        bgCtx.lineWidth = 1;
+
+        // Vertical / Horizontal network grid mesh background
+        const gridGap = 65;
+        for (let x = 0; x < w; x += gridGap) {
+          bgCtx.beginPath();
+          bgCtx.moveTo(x, 0);
+          bgCtx.lineTo(x, h);
+          bgCtx.stroke();
+        }
+        for (let y = 0; y < h; y += gridGap) {
+          bgCtx.beginPath();
+          bgCtx.moveTo(0, y);
+          bgCtx.lineTo(w, y);
+          bgCtx.stroke();
+        }
+
+        // Drifting background node star elements
+        for (let i = 0; i < stars.length; i++) {
+          let s = stars[i];
+          s.y -= s.speed;
+          if (s.y < 0) {
+            s.y = h;
+            s.x = Math.random() * w;
+          }
+          bgCtx.beginPath();
+          bgCtx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+          bgCtx.fillStyle = `rgba(56, 189, 248, ${s.opacity})`;
+          bgCtx.fill();
+        }
+
+        requestAnimationFrame(animateBackdrops);
+      }
+
+      // ----------------------------------------------------
+      // AGENT NETWORK DYNAMIC LASER PATH DRAWING ENGINE
+      // ----------------------------------------------------
+      const agentCanvas = document.getElementById('agent-canvas');
+      const agentCtx = agentCanvas?.getContext('2d');
+
+      function animateAgentNetworkLasers() {
+        if (!agentCtx || !agentCanvas) return;
+        const container = document.getElementById('agent-network-container');
+        if (!container) return;
+
+        // Resize agent connector canvas relative to its bento container
+        const rect = container.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        agentCanvas.width = rect.width * dpr;
+        agentCanvas.height = rect.height * dpr;
+        agentCanvas.style.width = rect.width + 'px';
+        agentCanvas.style.height = rect.height + 'px';
+        agentCtx.scale(dpr, dpr);
+
+        agentCtx.clearRect(0, 0, rect.width, rect.height);
+
+        // Map centers of all 9 Agent cards inside grid
+        const nodes = {};
+        const agentNodes = document.querySelectorAll('.agent-node');
+        agentNodes.forEach(el => {
+          const id = el.getAttribute('data-agent-id');
+          const elRect = el.getBoundingClientRect();
+          nodes[id] = {
+            x: elRect.left - rect.left + elRect.width / 2,
+            y: elRect.top - rect.top + elRect.height / 2,
+            active: el.classList.contains('active')
+          };
+        });
+
+        // Collect names of all active agents
+        const activeIds = Object.keys(nodes).filter(id => nodes[id].active);
+
+        // If multiple agents are active, draw neon cyber connections & glowing particle pulses between them
+        if (activeIds.length >= 2) {
+          for (let i = 0; i < activeIds.length; i++) {
+            for (let j = i + 1; j < activeIds.length; j++) {
+              const nodeA = nodes[activeIds[i]];
+              const nodeB = nodes[activeIds[j]];
+              if (!nodeA || !nodeB) continue;
+
+              // Draw double-layered neon paths
+              // 1. Core cyber trace line
+              agentCtx.beginPath();
+              agentCtx.moveTo(nodeA.x, nodeA.y);
+              agentCtx.lineTo(nodeB.x, nodeB.y);
+              agentCtx.strokeStyle = 'rgba(251, 191, 36, 0.25)'; // Gold linkage
+              agentCtx.lineWidth = 1;
+              agentCtx.stroke();
+
+              // 2. Wide outer glowing trace
+              agentCtx.beginPath();
+              agentCtx.moveTo(nodeA.x, nodeA.y);
+              agentCtx.lineTo(nodeB.x, nodeB.y);
+              agentCtx.strokeStyle = 'rgba(6, 182, 212, 0.08)'; // Ice blue bloom
+              agentCtx.lineWidth = 4;
+              agentCtx.stroke();
+
+              // 3. Gliding gold data packet photon
+              const t = (performance.now() % 1600) / 1600; // time factor (0 to 1 loop)
+              const px = nodeA.x + (nodeB.x - nodeA.x) * t;
+              const py = nodeA.y + (nodeB.y - nodeA.y) * t;
+
+              agentCtx.beginPath();
+              agentCtx.arc(px, py, 3.5, 0, Math.PI * 2);
+              agentCtx.fillStyle = '#fbbf24'; // radiant gold dot
+              agentCtx.shadowColor = '#fbbf24';
+              agentCtx.shadowBlur = 8;
+              agentCtx.fill();
+              agentCtx.shadowBlur = 0; // reset
+            }
+          }
+        }
+
+        requestAnimationFrame(animateAgentNetworkLasers);
+      }
+
+      // ----------------------------------------------------
+      // BUSINESS LOGIC ENGINE
+      // ----------------------------------------------------
+      
+      // Starts clock & runs dynamic indicator loops on load
+      window.onload = function() {
+        lucide.createIcons();
+        resizeCanvases();
+        initBackgroundStars();
+        animateBackdrops();
+        animateAgentNetworkLasers();
+
+        window.addEventListener('resize', () => {
+          resizeCanvases();
+          initBackgroundStars();
+        });
+
+        // Run UTC clock tick on top right
+        setInterval(() => {
+          const now = new Date();
+          const str = now.toISOString().replace('T', ' ').substring(0, 19);
+          document.getElementById('ticker-time').textContent = str;
+        }, 1000);
+
+        // Run subtle dynamic accuracy confidence drift to simulate real estimation
+        setInterval(() => {
+          if (state.hasContext) {
+            const drift = 98.4 + (Math.sin(Date.now() / 3000) * 0.14) + (Math.random() * 0.05);
+            document.getElementById('metric-confidence').textContent = drift.toFixed(2) + "%";
+          }
+        }, 2000);
+      };
+
+      // Ingest the preloaded context parameters and trigger initial injection animations
+      function sendEnterpriseContext() {
+        if (state.hasContext) return; // ignore duplicates
+
+        // Read active values from text box container
+        const comp = document.getElementById('input-company').value.trim();
+        const ind = document.getElementById('input-industry').value.trim();
+        
+        if (!comp || !ind) {
+          alert("企业核心数据字段不可留空。");
+          return;
+        }
+
+        // Play auditory context injection glow
+        state.hasContext = true;
+        
+        // Disable input text fields to locked state
+        document.querySelectorAll('#input-fields-container input, #input-fields-container textarea').forEach(el => {
+          el.setAttribute('disabled', 'true');
+          el.classList.add('opacity-70', 'border-slate-800', 'bg-slate-900/40', 'text-slate-400');
+        });
+
+        // Adjust badge styles
+        const badge = document.getElementById('context-badge');
+        badge.textContent = "已注入 INJECTED";
+        badge.classList.remove('bg-slate-800', 'text-slate-400', 'border-slate-700');
+        badge.classList.add('bg-cyan-950/50', 'text-cyan-400', 'border-cyan-500/30');
+
+        // Reveal mini secure key lock note
+        document.getElementById('context-lock-message').classList.remove('hidden');
+        document.getElementById('btn-inject-context').setAttribute('disabled', 'true');
+        document.getElementById('btn-inject-context').classList.add('opacity-50', 'pointer-events-none');
+        document.getElementById('dashboard-status-text').textContent = "上下文注入成功 - 系统就绪";
+
+        // Display high priority scanning bar over left card
+        const scanner = document.getElementById('left-panel-scanner');
+        scanner.classList.remove('hidden');
+
+        // Increment baseline metrics
+        state.tokenCount += 1840;
+        document.getElementById('metric-tokens').textContent = state.tokenCount.toLocaleString();
+        document.getElementById('metric-confidence').textContent = "98.40%";
+
+        // Trigger dynamic glow pulse onto node 1
+        const circle = document.getElementById('stage-circle-0');
+        circle.classList.remove('border-slate-700', 'bg-slate-950', 'text-slate-400');
+        circle.classList.add('border-cyan-400', 'bg-cyan-950/80', 'text-cyan-400', 'neon-glow-cyan');
+        document.getElementById('stage-pulse-0').classList.remove('opacity-0');
+
+        // Append initial logs into terminal
+        appendLog("[SYSTEM] 企业元数据接收就绪。准备对齐先进装配 RAG 索引...");
+        appendLog(`[SYSTEM] 接收详情: [${comp}] 产业边界: ${ind}。算力矩阵就绪。`);
+
+        // Automatically load and start Stage 1
+        setTimeout(() => {
+          startStage(0);
+        }, 800);
+      }
+
+      // Begins a specific Stage index and runs its inner tasks sequentially
+      function startStage(stageIdx) {
+        state.currentStageIndex = stageIdx;
+        state.currentTaskIndex = 0;
+        state.isStageRunning = true;
+
+        // Set control UI states during active stage running
+        const btnNext = document.getElementById('btn-next-stage');
+        btnNext.setAttribute('disabled', 'true');
+        btnNext.classList.remove('bg-amber-400', 'border-amber-400', 'text-slate-950', 'hover:bg-amber-300', 'cursor-pointer');
+        btnNext.classList.add('bg-slate-900', 'border-slate-800', 'text-slate-500', 'cursor-not-allowed');
+        document.getElementById('next-stage-icon').classList.remove('text-slate-950');
+        document.getElementById('next-stage-icon').classList.add('text-slate-500');
+
+        // Update indicators
+        document.getElementById('current-stage-idx-readout').textContent = `STAGE ${stageIdx + 1} / 6`;
+        const activeStage = STAGES[stageIdx];
+        document.getElementById('dashboard-status-text').textContent = `正在运行 - ${activeStage.name}`;
+
+        // Clear placeholder screen if present
+        const p = document.getElementById('queue-placeholder');
+        if (p) p.classList.add('hidden');
+
+        // Populate tasks panel with high-contrast steps list
+        loadStageTasks(stageIdx);
+
+        // Run the first task in queue
+        runStageTask(0);
+      }
+
+      // Populates the middle Bento's detailed activities tracker list
+      function loadStageTasks(stageIdx) {
+        const queueContainer = document.getElementById('stage-tasks-queue');
+        queueContainer.innerHTML = ''; // clear out prior items
+        
+        const stage = STAGES[stageIdx];
+        stage.tasks.forEach((task, idx) => {
+          const div = document.createElement('div');
+          div.id = `task-row-${idx}`;
+          div.className = "flex gap-3 bg-slate-950/30 border border-slate-900/60 rounded-lg p-2.5 items-center transition-all duration-300 opacity-60";
+          div.innerHTML = `
+            <div id="task-indicator-${idx}" class="w-5 h-5 rounded-full border border-slate-700 bg-slate-950 flex items-center justify-center shrink-0">
+              <span class="text-[9px] font-mono text-slate-500">${idx + 1}</span>
+            </div>
+            <div class="flex-1 min-h-0">
+              <div class="flex items-center justify-between">
+                <h4 class="text-[11px] font-semibold text-slate-300 truncate" id="task-title-${idx}">${task.name}</h4>
+                <span class="text-[9px] font-mono text-slate-500 uppercase" id="task-status-badge-${idx}">等待中</span>
+              </div>
+              <!-- Activity subdetails text -->
+              <p class="text-[9.5px] text-slate-500 mt-0.5" id="task-detail-${idx}">--</p>
+              
+              <!-- Integrated progress dial bar -->
+              <div class="h-1 bg-slate-900 rounded-full mt-1.5 overflow-hidden relative z-10">
+                <div id="task-bar-${idx}" class="h-full bg-cyan-400 rounded-full transition-all duration-100" style="width: 0%;"></div>
+              </div>
+            </div>
+          `;
+          queueContainer.appendChild(div);
+        });
+
+        document.getElementById('current-task-ratio-text').textContent = `当前进度 (0/${stage.tasks.length})`;
+      }
+
+      // Executes a single micro-task over its designated simulated duration
+      function runStageTask(taskIdx) {
+        if (!state.isStageRunning) return;
+        state.currentTaskIndex = taskIdx;
+
+        const stage = STAGES[state.currentStageIndex];
+        const task = stage.tasks[taskIdx];
+
+        // Mark task container block as high-contrast active
+        const row = document.getElementById(`task-row-${taskIdx}`);
+        if (row) {
+          row.classList.remove('opacity-60', 'bg-slate-950/30');
+          row.classList.add('opacity-100', 'bg-slate-950/60', 'border-cyan-500/20');
+          
+          // Auto scroll the tasks queue container to focus on the active task row, tracking elements to the bottom
+          const queue = document.getElementById('stage-tasks-queue');
+          if (queue) {
+            queue.scrollTo({
+              top: row.offsetTop - 16,
+              behavior: 'smooth'
+            });
+          }
+        }
+
+        // Set status text and visual pulse circle
+        const indicator = document.getElementById(`task-indicator-${taskIdx}`);
+        if (indicator) {
+          indicator.className = "w-5 h-5 rounded-full border border-amber-400 bg-amber-450/10 flex items-center justify-center shrink-0 animate-pulse shadow-[0_0_6px_rgba(251,191,36,0.2)]";
+          indicator.innerHTML = `<i data-lucide="play" class="w-3 h-3 text-amber-400"></i>`;
+          lucide.createIcons();
+        }
+
+        document.getElementById(`task-status-badge-${taskIdx}`).textContent = "进行中 RUN";
+        document.getElementById(`task-status-badge-${taskIdx}`).className = "text-[9px] font-mono text-amber-400 font-semibold uppercase animate-pulse";
+        
+        if (task.detail) {
+          document.getElementById(`task-detail-${taskIdx}`).textContent = task.detail;
+          document.getElementById(`task-detail-${taskIdx}`).classList.remove('text-slate-500');
+          document.getElementById(`task-detail-${taskIdx}`).classList.add('text-slate-300');
+        }
+
+        // Active Agent lighting triggers
+        setActiveAgents(task.activeAgents);
+
+        // Run typing ticker updates for logging, simulating server computations
+        if (task.log) {
+          appendLog(`[${task.activeAgents.join(' & ')}] ${task.log}`);
+        }
+
+        // If in Knowledge Retrieval stage, trigger Cloud cloud RAG scroll counters
+        if (state.currentStageIndex === 3) {
+          triggerRAGRetrieval(taskIdx);
+        }
+
+        // Start progress bar animation
+        let elapsed = 0;
+        const total = task.duration;
+        const interval = 50;
+        const bar = document.getElementById(`task-bar-${taskIdx}`);
+
+        // Update processed token counts smoothly during operations
+        const tokenIncrement = Math.floor(Math.random() * 4120) + 1200;
+        let localTokenStart = state.tokenCount;
+
+        const barTimer = setInterval(() => {
+          elapsed += interval;
+          const percentage = Math.min((elapsed / total) * 100, 100);
+          if (bar) {
+            bar.style.width = percentage + "%";
+            // Color change matching accent hues
+            if (stage.accent === "gold") bar.style.backgroundColor = "#fbbf24";
+            else if (stage.accent === "blue") bar.style.backgroundColor = "#38bdf8";
+            else if (stage.accent === "purple") bar.style.backgroundColor = "#a855f7";
+            else if (stage.accent === "pink") bar.style.backgroundColor = "#ec4899";
+            else if (stage.accent === "green") bar.style.backgroundColor = "#10b981";
+          }
+
+          // Smoothly tick up Token metrics readout
+          const curToken = Math.floor(localTokenStart + (tokenIncrement * (percentage / 100)));
+          document.getElementById('metric-tokens').textContent = curToken.toLocaleString();
+
+          if (elapsed >= total) {
+            clearInterval(barTimer);
+            state.tokenCount += tokenIncrement;
+            completeStageTask(taskIdx);
+          }
+        }, interval);
+
+        state.activeTimers.push(barTimer);
+      }
+
+      // Handles conclusion of single micro-task and loops forward or finishes
+      function completeStageTask(taskIdx) {
+        const stage = STAGES[state.currentStageIndex];
+        const task = stage.tasks[taskIdx];
+
+        // Mark row visually as solid completed
+        const row = document.getElementById(`task-row-${taskIdx}`);
+        if (row) {
+          row.classList.add('border-emerald-500/10', 'bg-slate-950/20');
+        }
+
+        const indicator = document.getElementById(`task-indicator-${taskIdx}`);
+        if (indicator) {
+          indicator.className = "w-5 h-5 rounded-full border border-emerald-500 bg-emerald-500/10 flex items-center justify-center shrink-0 shadow-[0_0_6px_rgba(16,185,129,0.15)]";
+          indicator.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 font-bold"></i>`;
+          lucide.createIcons();
+        }
+
+        const badge = document.getElementById(`task-status-badge-${taskIdx}`);
+        badge.textContent = "已完成 OK";
+        badge.className = "text-[9px] font-mono text-emerald-400 font-semibold uppercase";
+
+        document.getElementById(`task-detail-${taskIdx}`).classList.remove('text-slate-300');
+        document.getElementById(`task-detail-${taskIdx}`).classList.add('text-slate-400');
+
+        // Increment ratio counter in middle header
+        document.getElementById('current-task-ratio-text').textContent = `当前进度 (${taskIdx + 1}/${stage.tasks.length})`;
+
+        // Special output triggers for final reports
+        if (state.currentStageIndex === 5) {
+          revealReportOutputSegment(taskIdx);
+        }
+
+        const nextIdx = taskIdx + 1;
+        if (nextIdx < stage.tasks.length) {
+          // Trigger next microtask
+          setTimeout(() => {
+            runStageTask(nextIdx);
+          }, 400);
+        } else {
+          // Finish whole Stage Node!
+          completeCurrentStage();
+        }
+      }
+
+      // Handles stage wrapup & unlocks Next Stage to audiences
+      function completeCurrentStage() {
+        state.isStageRunning = false;
+        clearTimers();
+
+        // Turn off all activated agent nodes to idle
+        setActiveAgents([]);
+
+        const idx = state.currentStageIndex;
+        const stage = STAGES[idx];
+
+        // Visually seal progress circle node in the horizontal track
+        const circle = document.getElementById(`stage-circle-${idx}`);
+        circle.classList.remove('border-slate-700', 'bg-slate-950', 'text-slate-400', 'border-cyan-400', 'bg-cyan-950/80', 'text-cyan-400', 'border-amber-400', 'bg-amber-950/80', 'text-amber-400', 'neon-glow-cyan', 'neon-glow-gold');
+        circle.classList.add('border-emerald-500', 'bg-emerald-950/50', 'text-emerald-400', 'shadow-[0_0_12px_rgba(16,185,129,0.3)]');
+        
+        // Hide pulse
+        document.getElementById(`stage-pulse-${idx}`).classList.add('opacity-0');
+        
+        // Render tick inside tracker circle node
+        circle.innerHTML = `<i data-lucide="check" class="w-4 h-4 text-emerald-400 z-10 font-black"></i>`;
+        lucide.createIcons();
+
+        // Increment connecting pipeline fill bar
+        const pipe = document.getElementById('pipeline-progress');
+        const nextSegmentPercentage = Math.min((idx + 1) * 16.67, 83.34);
+        pipe.style.width = nextSegmentPercentage + "%";
+
+        appendLog(`[SYSTEM] ======== 第 ${idx + 1} 阶段「${stage.name}」已全部合拢成功 ========`);
+        document.getElementById('dashboard-status-text').textContent = `就绪 - ${stage.name} 已合拢`;
+
+        // Check if fully closed at stage 06
+        if (idx === 5) {
+          state.isWorkflowComplete = true;
+          triggerGlobalWorkflowCompletion();
+          return;
+        }
+
+        // Enable next stage advance controller
+        const btnNext = document.getElementById('btn-next-stage');
+        btnNext.removeAttribute('disabled');
+        btnNext.className = "shiny-button px-6 py-2 rounded-lg bg-amber-400 border border-amber-400 text-slate-950 font-display font-semibold text-xs flex items-center gap-2 duration-300 hover:bg-amber-300 active:scale-95 shadow-[0_4px_16px_rgba(251,191,36,0.3)] cursor-pointer";
+        
+        const nextIcon = document.getElementById('next-stage-icon');
+        nextIcon.classList.remove('text-slate-500');
+        nextIcon.classList.add('text-slate-950', 'animate-pulse');
+
+        // Pulse next phase circle node as invitation to audience
+        const nextNodeIdx = idx + 1;
+        if (nextNodeIdx <= 5) {
+          const nextStageObj = STAGES[nextNodeIdx];
+          const nextCircle = document.getElementById(`stage-circle-${nextNodeIdx}`);
+          
+          if (nextStageObj.accent === "gold") {
+            nextCircle.classList.add('border-amber-400', 'bg-amber-950/80', 'text-amber-400', 'neon-glow-gold');
+          } else if (nextStageObj.accent === "blue") {
+            nextCircle.classList.add('border-cyan-400', 'bg-cyan-950/80', 'text-cyan-400', 'neon-glow-cyan');
+          } else if (nextStageObj.accent === "purple") {
+            nextCircle.classList.add('border-purple-400', 'bg-purple-950/80', 'text-purple-400', 'neon-glow-cyan');
+          } else if (nextStageObj.accent === "pink") {
+            nextCircle.classList.add('border-pink-400', 'bg-pink-950/80', 'text-pink-400', 'neon-glow-cyan');
+          } else if (nextStageObj.accent === "green") {
+            nextCircle.classList.add('border-emerald-400', 'bg-emerald-950/80', 'text-emerald-400', 'neon-glow-cyan');
+          }
+          
+          document.getElementById(`stage-pulse-${nextNodeIdx}`).classList.remove('opacity-0');
+        }
+      }
+
+      // Advance control room workflow index on big button click
+      function goNextStage() {
+        if (state.isStageRunning || state.isWorkflowComplete || !state.hasContext) return;
+        
+        const nextIdx = state.currentStageIndex + 1;
+        if (nextIdx <= 5) {
+          // Play kinetic full-screen background expanding shockwave
+          triggerTransitionShockwave();
+          startStage(nextIdx);
+        }
+      }
+
+      // Adjusts active state displays of specified agents inside dynamic grid
+      function setActiveAgents(agentNames) {
+        state.activeAgents = agentNames;
+        document.getElementById('metric-agents-count').textContent = agentNames.length;
+
+        // Reset all nodes to idle desaturated backgrounds
+        document.querySelectorAll('.agent-node').forEach(el => {
+          el.classList.remove('active', 'border-amber-400/40', 'bg-amber-950/20', 'shadow-[0_0_12px_rgba(251,191,36,0.15)]');
+          const orb = el.querySelector('.w-9');
+          orb?.classList.remove('animate-pulse');
+        });
+
+        // Toggle focus styles over target ones
+        agentNames.forEach(name => {
+          const el = document.querySelector(`[data-agent-id="${name}"]`);
+          if (el) {
+            el.classList.add('active', 'border-amber-400/40', 'bg-amber-950/20', 'shadow-[0_0_12px_rgba(251,191,36,0.15)]');
+            const orb = el.querySelector('.w-9');
+            orb?.classList.add('animate-pulse');
+          }
+        });
+
+        // Adjust active agent ticker readouts
+        const ticker = document.getElementById('agent-ticker-action');
+        if (agentNames.length > 0) {
+          const agentCodes = {
+            Planner: "PLN",
+            Strategy: "STR",
+            Finance: "FIN",
+            Operations: "OPS",
+            Risk: "RSK",
+            Retrieval: "RTV",
+            Writing: "WRT",
+            Review: "RVW",
+            Synthesizer: "SYN"
+          };
+          let displayStr = "";
+          if (agentNames.length <= 2) {
+            displayStr = `活跃: ${agentNames.map(n => agentCodes[n] || n).join(' ⇄ ')}`;
+          } else {
+            displayStr = `协同: ${agentNames.length} 智能体在线`;
+          }
+          ticker.textContent = displayStr;
+          ticker.className = "text-[10px] font-mono px-2 py-0.5 rounded bg-amber-950/50 text-amber-400 border border-amber-500/15 animate-pulse shrink-0";
+        } else {
+          ticker.textContent = "协作网络就绪";
+          ticker.className = "text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800/80 text-cyan-400 border border-cyan-500/10 shrink-0";
+        }
+      }
+
+      // Appends styled print logging items inside console pane
+      function appendLog(text) {
+        const pan = document.getElementById('terminal-mini-logs');
+        if (!pan) return;
+
+        const d = document.createElement('div');
+        d.className = "font-mono line-clamp-1 py-0.5 border-b border-zinc-950/30 text-[10px]";
+        
+        // Alternate cyan/emerald tags
+        if (text.includes('[SYSTEM]')) {
+          d.innerHTML = `<span class="text-slate-400 font-semibold">[SYSTEM]</span> <span class="text-cyan-400">${text.split('[SYSTEM]')[1]}</span>`;
+        } else if (text.includes('[ERROR]')) {
+          d.innerHTML = `<span class="text-rose-500 font-semibold">[ERR]</span> <span class="text-rose-300">${text.split('[ERROR]')[1]}</span>`;
+        } else {
+          // Parse agent tag
+          const parts = text.split(']');
+          if (parts.length >= 2) {
+            const ags = parts[0].substring(1);
+            d.innerHTML = `<span class="text-amber-400">[${ags}]</span> <span class="text-slate-300">${parts.slice(1).join(']')}</span>`;
+          } else {
+            d.textContent = text;
+          }
+        }
+
+        pan.appendChild(d);
+        pan.scrollTop = pan.scrollHeight; // anchor scroll downwards
+      }
+
+      // Simulate live database retrieved files count for RAG
+      function triggerRAGRetrieval(taskIdx) {
+        const fragCount = document.getElementById('retrieved-fragments-count');
+        const label = document.getElementById('retrieval-source-title');
+        
+        let start = state.knowledgeFragments;
+        const target = (taskIdx + 1) * 8 + Math.floor(Math.random() * 3);
+        state.knowledgeFragments = target;
+
+        // Dynamic ticker animation
+        let current = start;
+        const speed = 40;
+        
+        const tickTimer = setInterval(() => {
+          if (current < target) {
+            current++;
+            fragCount.textContent = current;
+            
+            // Swap active database sources dynamically
+            const srcIdx = Math.floor(Math.random() * KNOWLEDGE_SOURCES.length);
+            label.textContent = KNOWLEDGE_SOURCES[srcIdx];
+          } else {
+            clearInterval(tickTimer);
+          }
+        }, speed);
+      }
+
+      // ----------------------------------------------------
+      // SECTION REVEALS & TYPEWRITING ENGINE FOR BOARD REPORTS
+      // ----------------------------------------------------
+      function revealReportOutputSegment(taskIdx) {
+        // Unhide core document arena
+        if (taskIdx === 0) {
+          document.getElementById('report-idle-frame').classList.add('hidden');
+          document.getElementById('report-stream-content').classList.remove('hidden');
+          
+          document.getElementById('report-digital-badge').textContent = "正在生成 SYNTHESIS...";
+          document.getElementById('report-digital-badge').classList.remove('text-slate-500');
+          document.getElementById('report-digital-badge').classList.add('text-amber-400', 'border-amber-400/20', 'bg-amber-400/5', 'animate-pulse');
+        }
+
+        const arena = document.getElementById('report-output-arena');
+
+        // Stage 6, Task 0: Title and structure fade
+        if (taskIdx === 0) {
+          const sec = document.getElementById('report-sec-a');
+          sec.classList.remove('opacity-0');
+        }
+
+        // Stage 6, Task 1: Stream Typewriter Summary
+        if (taskIdx === 1) {
+          const sec = document.getElementById('report-sec-b');
+          sec.classList.remove('opacity-0');
+
+          const textBlock = "NovaTech 先进制造智能化路线由 AstraConsult 架构师智能体多核对齐论证。方案聚焦部署制造端「工业边缘计算机质检系统」消灭高能手工冗余，重整三线/四线「物料调度总线数据网格」打破系统孤立，实现董事会级高管驾驶舱自主摘要。预期本期技改可斩获首年直接运营本钱压缩高达 **$12.4M**，同时将董事决策流程响应反馈链由两周时间大幅缩短至 **7.2s** 秒级体验。";
+          
+          typeWriterEffect('type-writer-summary-target', textBlock, 20);
+        }
+
+        // Stage 6, Task 2: Reveal chart values with responsive transitions
+        if (taskIdx === 2) {
+          const sec = document.getElementById('report-sec-c');
+          sec.classList.remove('opacity-0');
+
+          setTimeout(() => {
+            document.getElementById('chart-bar-0').style.width = "84%";
+            document.getElementById('chart-bar-1').style.width = "99.7%";
+            document.getElementById('chart-bar-2').style.width = "78%";
+          }, 300);
+        }
+
+        // Stage 6, Task 3: Reveal roadmap stages
+        if (taskIdx === 3) {
+          const sec = document.getElementById('report-sec-d');
+          sec.classList.remove('opacity-0');
+
+          // Highlight sequence flows
+          const cardFlows = document.querySelectorAll('.card-flow');
+          cardFlows.forEach((card, idx) => {
+            setTimeout(() => {
+              card.classList.add('translate-y-0', 'transition-all', 'duration-500', 'shadow-[0_0_8px_rgba(255,193,7,0.05)]');
+            }, idx * 400);
+          });
+        }
+      }
+
+      // Classic typing script
+      function typeWriterEffect(elementId, text, speed) {
+        const el = document.getElementById(elementId);
+        if (!el) return;
+
+        el.innerHTML = '';
+        let i = 0;
+
+        // Custom ticker
+        const typeTimer = setInterval(() => {
+          if (i < text.length) {
+            let char = text.charAt(i);
+            // Translate inline markdown-like stars to bold spans simply
+            if (char === '*' && text.charAt(i + 1) === '*') {
+              // Extract text inside stars
+              const endIdx = text.indexOf('**', i + 2);
+              if (endIdx !== -1) {
+                const boldText = text.substring(i + 2, endIdx);
+                el.innerHTML += `<strong class="text-amber-400 font-semibold underline-offset-4 decoration-amber-400/30">${boldText}</strong>`;
+                i = endIdx + 2;
+                return;
+              }
+            }
+            el.innerHTML += char;
+            i++;
+            el.innerHTML += '<span class="typing-cursor"></span>';
+            // Remove previous typing cursors
+            const cursors = el.querySelectorAll('.typing-cursor');
+            if (cursors.length > 1) {
+              cursors[0].remove();
+            }
+
+            // Auto anchor scrolling inside layout
+            const arena = document.getElementById('report-output-arena');
+            arena.scrollTop = arena.scrollHeight;
+          } else {
+            clearInterval(typeTimer);
+            // Clean cursor at finish
+            const cursors = el.querySelectorAll('.typing-cursor');
+            cursors.forEach(c => c.remove());
+          }
+        }, speed);
+
+        state.activeTimers.push(typeTimer);
+      }
+
+      // Trigger transition lightwave on Phase Jump
+      function triggerTransitionShockwave() {
+        const wave = document.getElementById('shockwave');
+        if (!wave) return;
+        
+        wave.classList.remove('scale-0', 'opacity-0');
+        wave.className = "absolute inset-0 bg-transparent border-4 border-amber-400/40 rounded-full scale-110 opacity-100 z-50 pointer-events-none transition-all duration-800 transform translate-y-0 shadow-[0_0_30px_rgba(251,191,36,0.25)]";
+
+        setTimeout(() => {
+          wave.className = "absolute inset-0 bg-transparent border-4 border-amber-400/0 rounded-full scale-150 opacity-0 z-50 pointer-events-none transition-all duration-1000 transform translate-y-0";
+        }, 800);
+      }
+
+      // Success victory dashboard state when workflow fully completes
+      function triggerGlobalWorkflowCompletion() {
+        // Toggle reports credentials to seal
+        document.getElementById('report-sec-e').classList.remove('opacity-0');
+        document.getElementById('report-sec-f').classList.remove('opacity-0');
+
+        // Digital seal label
+        const rBadge = document.getElementById('report-digital-badge');
+        rBadge.textContent = "已签署 SEALS APPROVED";
+        rBadge.className = "text-[8px] font-mono px-1.5 py-0.5 rounded border border-emerald-500/20 bg-emerald-500/5 text-emerald-400";
+
+        // Global dashboard tracker changes
+        document.getElementById('dashboard-status-text').textContent = "决选白皮书生成就绪 | WORKFLOW COMPLETE";
+
+        // Next Stage Action Button converts to Victory State
+        const btnNext = document.getElementById('btn-next-stage');
+        btnNext.innerHTML = `<span>演示完成 - 咨询方案已合拢</span> <i data-lucide="award" class="w-4 h-4"></i>`;
+        btnNext.setAttribute('disabled', 'true');
+        btnNext.className = "px-6 py-2 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-700 border border-emerald-500/20 text-white font-display font-semibold text-xs flex items-center gap-2 select-none shadow-[0_4px_24px_rgba(16,185,129,0.3)]";
+        lucide.createIcons();
+
+        appendLog("[SYSTEM] SUCCESS! AstraConsult Agentic 连线完成，已铸造最终决策专报。");
+        appendLog("[SYSTEM] 退出指挥舱运算系统。退出端口: PORT 3000 STATUS CLEAR.");
+
+        // Anchor scroll report area down
+        const arena = document.getElementById('report-output-arena');
+        arena.scrollTop = arena.scrollHeight;
+      }
+
+      // Reset workspace variables
+      function resetDemo() {
+        clearTimers();
+        state = {
+          hasContext: false,
+          currentStageIndex: -1,
+          currentTaskIndex: -1,
+          isStageRunning: false,
+          isWorkflowComplete: false,
+          tokenCount: 0,
+          confidence: 0,
+          activeAgents: [],
+          knowledgeFragments: 0,
+          activeTimers: []
+        };
+
+        // Reset indicators
+        document.getElementById('metric-tokens').textContent = "0";
+        document.getElementById('metric-agents-count').textContent = "0";
+        document.getElementById('metric-confidence').textContent = "--";
+        document.getElementById('retrieved-fragments-count').textContent = "0";
+        document.getElementById('current-stage-idx-readout').textContent = "STAGE 0 / 6";
+        document.getElementById('dashboard-status-text').textContent = "准备就绪 - 等待注入";
+        
+        // Reset left panel
+        document.getElementById('left-panel-scanner').classList.add('hidden');
+        document.getElementById('context-lock-message').classList.add('hidden');
+        document.getElementById('btn-inject-context').removeAttribute('disabled');
+        document.getElementById('btn-inject-context').className = "shiny-button w-full bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-500 hover:to-blue-600 text-white font-display text-xs font-semibold py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 duration-300 active:scale-95 shadow-[0_4px_12px_rgba(6,182,212,0.15)] select-none";
+        
+        document.querySelectorAll('#input-fields-container input, #input-fields-container textarea').forEach(el => {
+          el.removeAttribute('disabled');
+          el.classList.remove('opacity-70', 'border-slate-800', 'bg-slate-900/40', 'text-slate-400');
+        });
+
+        const badge = document.getElementById('context-badge');
+        badge.textContent = "等待注入";
+        badge.className = "text-[9px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700 uppercase";
+
+        // Reset progress rail track
+        const pipe = document.getElementById('pipeline-progress');
+        pipe.style.width = "0%";
+
+        STAGES.forEach((stage, idx) => {
+          const circle = document.getElementById(`stage-circle-${idx}`);
+          circle.className = "relative flex items-center justify-center w-8 h-8 rounded-full border border-slate-700 bg-slate-950 transition-all duration-500 text-slate-400 font-display text-xs font-semibold shadow-inner";
+          circle.innerHTML = `<span class="z-10 node-num">${idx + 1}</span>`;
+          document.getElementById(`stage-pulse-${idx}`).classList.add('opacity-0');
+        });
+
+        // Reset details panel
+        const bentoTasks = document.getElementById('stage-tasks-queue');
+        bentoTasks.innerHTML = `
+          <div id="queue-placeholder" class="absolute inset-0 flex flex-col items-center justify-center text-center p-6 text-slate-500 z-10 select-none">
+            <i data-lucide="play-circle" class="w-12 h-12 text-slate-700 mb-2 animate-pulse"></i>
+            <p class="text-xs font-mono">等待注入企业信息并启动系统轨道</p>
+            <p class="text-[10px] mt-1 text-slate-600">AastraConsult Command Deck System 1.0</p>
+          </div>
+        `;
+        document.getElementById('current-task-ratio-text').textContent = "未开始";
+
+        // Reset active agent hexagons
+        setActiveAgents([]);
+
+        // Reset digital scrolling logs
+        document.getElementById('terminal-mini-logs').innerHTML = `<div class="text-slate-500">[SYSTEM] AstraConsult 驱动内核准备就绪。等待输入指令...</div>`;
+
+        // Reset cloud labels
+        document.getElementById('retrieval-source-title').textContent = "数据库待命";
+        
+        // Reset reports draft segment
+        document.getElementById('report-idle-frame').classList.remove('hidden');
+        document.getElementById('report-stream-content').classList.add('hidden');
+        
+        document.getElementById('report-sec-a').className = "opacity-0 transition-opacity duration-1000";
+        document.getElementById('report-sec-b').className = "opacity-0 transition-opacity duration-1000 bg-slate-950/30 border border-slate-900/60 rounded p-3 text-slate-300 prose prose-invert font-sans leading-relaxed text-[11px]";
+        document.getElementById('report-sec-c').className = "opacity-0 transition-opacity duration-1000";
+        document.getElementById('report-sec-d').className = "opacity-0 transition-opacity duration-1000 space-y-2";
+        document.getElementById('report-sec-e').className = "opacity-0 transition-opacity duration-1000 bg-[#ef4444]/5 border border-[#ef4444]/15 rounded p-2.5 text-[9.5px] text-slate-400";
+        document.getElementById('report-sec-f').className = "opacity-0 transition-opacity duration-1000 text-center pt-3 border-t border-slate-800 shrink-0";
+        
+        document.getElementById('chart-bar-0').style.width = "0%";
+        document.getElementById('chart-bar-1').style.width = "0%";
+        document.getElementById('chart-bar-2').style.width = "0%";
+
+        const rBadge = document.getElementById('report-digital-badge');
+        rBadge.textContent = "未合拢 READ_ERR";
+        rBadge.className = "text-[8px] font-mono px-1.5 py-0.5 rounded border border-slate-800 bg-slate-950/60 text-slate-500 uppercase tracking-widest leading-none";
+
+        // Next Stage Action resetting
+        const btnNext = document.getElementById('btn-next-stage');
+        btnNext.innerHTML = `<span>进入下一个流程轨道</span> <i data-lucide="chevrons-right" class="w-4 h-4 text-slate-500" id="next-stage-icon"></i>`;
+        btnNext.setAttribute('disabled', 'true');
+        btnNext.className = "shiny-button px-6 py-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-500 font-display font-medium text-xs flex items-center gap-2 duration-300 select-none cursor-not-allowed";
+        
+        lucide.createIcons();
+        appendLog("[SYSTEM] 工作舱数据清空。系统状态回归初始设定。");
+      }
+
+      function clearTimers() {
+        state.activeTimers.forEach(t => clearInterval(t));
+        state.activeTimers = [];
+      }
+
+      // Enter native browser大屏 mode
+      function requestFullscreen() {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(err => {
+            console.warn(`Error trying to enable full-screen mode: ${err.message}`);
+          });
+        } else {
+          document.exitFullscreen();
+        }
+      }
+    </script>
+  </body>
+</html>
