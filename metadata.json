@@ -1,0 +1,6 @@
+{
+  "name": "AstraConsult Workflow Visualizer",
+  "description": "Enterprise consulting report generation Agent workflow visualization for launch presentation",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
